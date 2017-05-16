@@ -1,0 +1,5 @@
+.idea
+.gradle
+build
+test.db
+src/main/java/br/com/augustoccesar/querybuilder/mapper/test
