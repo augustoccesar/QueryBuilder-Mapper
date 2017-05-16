@@ -6,5 +6,7 @@ package br.com.augustoccesar.querybuilder.mapper.models;
  */
 public enum ColumnType {
     INTEGER,
-    VARCHAR;
+    VARCHAR,
+    BOOLEAN,
+    TIMESTAMP;
 }
