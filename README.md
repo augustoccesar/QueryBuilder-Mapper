@@ -5,7 +5,7 @@
 Project created to try to build a better way to map result from database query
 to Java objects.
 
-## Usage
+## Mapper Usage
 Instead of having to map each column from the result like:
 ```java
 String sql = "SELECT u.id AS u_id, u.name AS u_name, up.gender AS up_gender, up.age AS up_age FROM users u INNER JOIN users_profile up ON u.id = up.user_id WHERE u.id = 1"
@@ -74,4 +74,35 @@ public class models.querybuilderannotation.UserProfile {
 
     // getter and setters omitted
 }
+```
+
+## Executor Usage
+Executor is used to reduce even more the quantity of code written to run simple queries, it's missing some more complex
+configurations yet, but for simple queries instead of having to run
+```java
+String sql = "SELECT u.id AS u_id, u.name AS u_name, up.gender AS up_gender, up.age AS up_age FROM users u INNER JOIN users_profile up ON u.id = up.user_id WHERE u.id = ?"
+try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+    stmt.setInt(1, 1);
+    try (ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+            User user = new Mapper<User>("u").map(rs, User.class);
+            UserProfile userProfile = new Mapper<UserProfile>("up").map(rs, UserProfile.class);
+
+            user.setUserProfile(userProfile);
+        }
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+}
+```
+you can run only
+```java
+String sql = "SELECT u.id AS u_id, u.name AS u_name, up.gender AS up_gender, up.age AS up_age FROM users u INNER JOIN users_profile up ON u.id = up.user_id WHERE u.id = 1"
+
+Executor.executeQuery(sql, connection, (rs) -> {
+    User user = new Mapper<User>("u").map(rs, User.class);
+    UserProfile userProfile = new Mapper<UserProfile>("up").map(rs, UserProfile.class);
+    
+    user.setUserProfile(userProfile);
+}, 1)
 ```
