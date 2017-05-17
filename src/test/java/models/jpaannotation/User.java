@@ -1,16 +1,15 @@
-import br.com.augustoccesar.querybuilder.mapper.annotations.Column;
-import br.com.augustoccesar.querybuilder.mapper.annotations.Table;
-import br.com.augustoccesar.querybuilder.mapper.models.ColumnType;
+package models.jpaannotation;
+
+import javax.persistence.Column;
 
 /**
  * Author: augustoccesar
  * Date: 16/05/17
  */
-@Table(name = "users")
 public class User {
-    @Column(name = "id", type = ColumnType.INTEGER)
+    @Column(name = "id")
     private int id;
-    @Column(name = "name", type = ColumnType.VARCHAR)
+    @Column(name = "name")
     private String name;
 
     private UserProfile userProfile;

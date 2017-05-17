@@ -1,20 +1,19 @@
+package models.withoutannotation;
+
 import br.com.augustoccesar.querybuilder.mapper.annotations.Column;
-import br.com.augustoccesar.querybuilder.mapper.annotations.Table;
-import br.com.augustoccesar.querybuilder.mapper.models.ColumnType;
 
 /**
  * Author: augustoccesar
  * Date: 16/05/17
  */
-@Table(name = "users_profile")
 public class UserProfile {
-    @Column(name = "id", type = ColumnType.INTEGER)
+    @Column(name = "id")
     private int id;
-    @Column(name = "user_id", type = ColumnType.INTEGER)
+    @Column(name = "user_id")
     private int userId;
-    @Column(name = "gender", type = ColumnType.VARCHAR)
+    @Column(name = "gender")
     private String gender;
-    @Column(name = "age", type = ColumnType.INTEGER)
+    @Column(name = "age")
     private int age;
 
     public int getId() {
