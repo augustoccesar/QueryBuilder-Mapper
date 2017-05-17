@@ -1,3 +1,4 @@
+import br.com.augustoccesar.querybuilder.executor.Executor;
 import br.com.augustoccesar.querybuilder.mapper.mapper.Mapper;
 import org.junit.After;
 import org.junit.Before;
@@ -46,14 +47,14 @@ public class IntegrationTest {
     }
 
     @Test
-    public void shouldMapResult() {
+    public void shouldMapResultQueryBuilderAnnotation() {
         String sql = "SELECT u.id AS u_id, u.name AS u_name, up.gender AS up_gender, up.age AS up_age FROM users u INNER JOIN users_profile up ON u.id = up.user_id WHERE u.id = 1";
 
         try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    User user = new Mapper<User>("u").map(rs, User.class);
-                    UserProfile userProfile = new Mapper<UserProfile>("up").map(rs, UserProfile.class);
+                    models.querybuilderannotation.User user = new Mapper<models.querybuilderannotation.User>("u").map(rs, models.querybuilderannotation.User.class);
+                    models.querybuilderannotation.UserProfile userProfile = new Mapper<models.querybuilderannotation.UserProfile>("up").map(rs, models.querybuilderannotation.UserProfile.class);
 
                     user.setUserProfile(userProfile);
 
@@ -66,5 +67,102 @@ public class IntegrationTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void shouldMapResultQueryBuilderJPAAnnotation() {
+        String sql = "SELECT u.id AS u_id, u.name AS u_name, up.gender AS up_gender, up.age AS up_age FROM users u INNER JOIN users_profile up ON u.id = up.user_id WHERE u.id = 1";
+
+        try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    models.jpaannotation.User user = new Mapper<models.jpaannotation.User>("u").map(rs, models.jpaannotation.User.class);
+                    models.jpaannotation.UserProfile userProfile = new Mapper<models.jpaannotation.UserProfile>("up").map(rs, models.jpaannotation.UserProfile.class);
+
+                    user.setUserProfile(userProfile);
+
+                    assertEquals(1, user.getId());
+                    assertEquals("Augusto Cesar", user.getName());
+                    assertEquals("male", user.getUserProfile().getGender());
+                    assertEquals(23, user.getUserProfile().getAge());
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void shouldMapResultQueryBuilderWithoutAnnotation() {
+        String sql = "SELECT u.id AS u_id, u.name AS u_name, up.gender AS up_gender, up.age AS up_age FROM users u INNER JOIN users_profile up ON u.id = up.user_id WHERE u.id = 1";
+
+        try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    models.withoutannotation.User user = new Mapper<models.withoutannotation.User>("u").map(rs, models.withoutannotation.User.class);
+                    models.withoutannotation.UserProfile userProfile = new Mapper<models.withoutannotation.UserProfile>("up").map(rs, models.withoutannotation.UserProfile.class);
+
+                    user.setUserProfile(userProfile);
+
+                    assertEquals(1, user.getId());
+                    assertEquals("Augusto Cesar", user.getName());
+                    assertEquals("male", user.getUserProfile().getGender());
+                    assertEquals(23, user.getUserProfile().getAge());
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void shouldMapResultQueryBuilderWithoutAnnotationAndExecutor() {
+        String sql = "SELECT u.id AS u_id, u.name AS u_name, up.gender AS up_gender, up.age AS up_age FROM users u INNER JOIN users_profile up ON u.id = up.user_id WHERE u.id = 1";
+
+        Executor.executeQuery(sql, this.connection, (resultSet) -> {
+            models.withoutannotation.User user = new Mapper<models.withoutannotation.User>("u").map(resultSet, models.withoutannotation.User.class);
+            models.withoutannotation.UserProfile userProfile = new Mapper<models.withoutannotation.UserProfile>("up").map(resultSet, models.withoutannotation.UserProfile.class);
+
+            user.setUserProfile(userProfile);
+
+            assertEquals(1, user.getId());
+            assertEquals("Augusto Cesar", user.getName());
+            assertEquals("male", user.getUserProfile().getGender());
+            assertEquals(23, user.getUserProfile().getAge());
+        });
+    }
+
+    @Test
+    public void shouldMapResultQueryBuilderWithoutAnnotationAndExecutorAndExceptionHandler() {
+        String sql = "SELECT u.id AS u_id, u.name AS u_name, up.gender AS up_gender, up.age AS up_age FROM users u INNER JOIN users_profile up ON u.id = up.user_id WHERE u.id = 1";
+
+        Executor.executeQuery(sql, this.connection, (resultSet) -> {
+            models.withoutannotation.User user = new Mapper<models.withoutannotation.User>("u").map(resultSet, models.withoutannotation.User.class);
+            models.withoutannotation.UserProfile userProfile = new Mapper<models.withoutannotation.UserProfile>("up").map(resultSet, models.withoutannotation.UserProfile.class);
+
+            user.setUserProfile(userProfile);
+
+            assertEquals(1, user.getId());
+            assertEquals("Augusto Cesar", user.getName());
+            assertEquals("male", user.getUserProfile().getGender());
+            assertEquals(23, user.getUserProfile().getAge());
+        }, (exception) -> System.err.println(exception.getMessage()));
+    }
+
+    @Test
+    public void shouldMapResultQueryBuilderWithoutAnnotationAndExecutorAndExceptionHandlerAndParams() {
+        String sql = "SELECT u.id AS u_id, u.name AS u_name, up.gender AS up_gender, up.age AS up_age FROM users u INNER JOIN users_profile up ON u.id = up.user_id WHERE u.id = ?";
+
+        Executor.executeQuery(sql, this.connection, (resultSet) -> {
+            models.withoutannotation.User user = new Mapper<models.withoutannotation.User>("u").map(resultSet, models.withoutannotation.User.class);
+            models.withoutannotation.UserProfile userProfile = new Mapper<models.withoutannotation.UserProfile>("up").map(resultSet, models.withoutannotation.UserProfile.class);
+
+            user.setUserProfile(userProfile);
+
+            assertEquals(1, user.getId());
+            assertEquals("Augusto Cesar", user.getName());
+            assertEquals("male", user.getUserProfile().getGender());
+            assertEquals(23, user.getUserProfile().getAge());
+        }, (exception) -> System.err.println(exception.getMessage()), 1);
     }
 }
