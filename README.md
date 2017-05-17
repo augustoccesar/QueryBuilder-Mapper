@@ -1,4 +1,7 @@
 # QueryBuilder Mapper
+[![Build Status](https://travis-ci.org/augustoccesar/QueryBuilder-Mapper.svg?branch=master)](https://travis-ci.org/augustoccesar/QueryBuilder-Mapper)
+[![GitHub version](https://badge.fury.io/gh/augustoccesar%2FQueryBuilder-Mapper.svg)](https://badge.fury.io/gh/augustoccesar%2FQueryBuilder-Mapper)
+
 Project created to try to build a better way to map result from database query
 to Java objects.
 
