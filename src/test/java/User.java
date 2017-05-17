@@ -13,6 +13,8 @@ public class User {
     @Column(name = "name", type = ColumnType.VARCHAR)
     private String name;
 
+    private UserProfile userProfile;
+
     public int getId() {
         return id;
     }
@@ -27,5 +29,13 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 }
