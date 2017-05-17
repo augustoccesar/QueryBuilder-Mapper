@@ -28,7 +28,7 @@ public class Mapper<T> {
                 try {
                     String columnName = alias + "_" + columnData.getName();
                     if (hasColumn(rs, columnName)) {
-                        BeanUtils.setProperty(obj, columnData.getName(), rs.getObject(columnName));
+                        BeanUtils.setProperty(obj, columnData.getAttributeName(), rs.getObject(columnName));
                     }
                 } catch (IllegalAccessException | InvocationTargetException | SQLException e) {
                     e.printStackTrace();

@@ -5,13 +5,15 @@ package br.com.augustoccesar.querybuilder.mapper.models;
  * Date: 15/05/17
  */
 public class ColumnData {
+    private String attributeName;
     private String name;
     private ColumnType columnType;
 
     public ColumnData() {
     }
 
-    public ColumnData(String name, ColumnType columnType) {
+    public ColumnData(String attributeName, String name, ColumnType columnType) {
+        this.attributeName = attributeName;
         this.name = name;
         this.columnType = columnType;
     }
@@ -30,5 +32,13 @@ public class ColumnData {
 
     public void setColumnType(ColumnType columnType) {
         this.columnType = columnType;
+    }
+
+    public String getAttributeName() {
+        return attributeName;
+    }
+
+    public void setAttributeName(String attributeName) {
+        this.attributeName = attributeName;
     }
 }

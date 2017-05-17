@@ -20,7 +20,7 @@ public class ClassReader {
         ClassReader classReader = new ClassReader();
 
         Arrays.asList(obj.getDeclaredAnnotations()).forEach(annotation -> {
-            if(annotation instanceof Table) {
+            if (annotation instanceof Table) {
                 classReader.tableData.setName(((Table) annotation).name());
                 classReader.tableData.setPrefix(((Table) annotation).prefix());
             }
@@ -28,8 +28,13 @@ public class ClassReader {
 
         Arrays.asList(obj.getDeclaredFields()).forEach(field -> {
             Arrays.asList(field.getDeclaredAnnotations()).forEach(annotation -> {
-                if(annotation instanceof Column){
-                    classReader.columnDataList.add(new ColumnData(((Column) annotation).name(), ((Column) annotation).type()));
+                if (annotation instanceof Column) {
+                    ColumnData columnData = new ColumnData();
+                    columnData.setAttributeName(field.getName());
+                    columnData.setName(((Column) annotation).name());
+                    columnData.setColumnType(((Column) annotation).type());
+
+                    classReader.columnDataList.add(columnData);
                 }
             });
         });
