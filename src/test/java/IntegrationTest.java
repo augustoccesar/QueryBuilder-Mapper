@@ -165,4 +165,23 @@ public class IntegrationTest {
             assertEquals(23, user.getUserProfile().getAge());
         }, (exception) -> System.err.println(exception.getMessage()), 1);
     }
+
+    @Test
+    public void shouldMapResultQueryBuilderWithoutAnnotationAndExecutorExistingInstance() {
+        String sql = "SELECT u.id AS u_id, u.name AS u_name, up.gender AS up_gender, up.age AS up_age FROM users u INNER JOIN users_profile up ON u.id = up.user_id WHERE u.id = 1";
+
+        final models.withoutannotation.User user = new models.withoutannotation.User();
+
+        Executor.executeQuery(sql, this.connection, (resultSet) -> {
+            new Mapper<models.withoutannotation.User>("u").map(resultSet, user);
+            models.withoutannotation.UserProfile userProfile = new Mapper<models.withoutannotation.UserProfile>("up").map(resultSet, models.withoutannotation.UserProfile.class);
+
+            user.setUserProfile(userProfile);
+        });
+
+        assertEquals(1, user.getId());
+        assertEquals("Augusto Cesar", user.getName());
+        assertEquals("male", user.getUserProfile().getGender());
+        assertEquals(23, user.getUserProfile().getAge());
+    }
 }

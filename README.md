@@ -5,6 +5,17 @@
 Project created to try to build a better way to map result from database query
 to Java objects.
 
+## Mapper creation
+The mapper can be created in one of the ways
+```java
+User user = new Mapper<User>("u").map(resultSet, User.class);
+```
+
+```java
+User user = new User();
+new Mapper<User>("u").map(resultSet, user);
+```
+
 ## Mapper Usage
 Instead of having to map each column from the result like:
 ```java
@@ -12,14 +23,14 @@ String sql = "SELECT u.id AS u_id, u.name AS u_name, up.gender AS up_gender, up.
 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
     try (ResultSet rs = stmt.executeQuery()) {
         while (rs.next()) {
-            models.querybuilderannotation.User user = new Mapper<models.querybuilderannotation.User>("u").map(rs, models.querybuilderannotation.User.class);
-            models.querybuilderannotation.UserProfile userProfile = new Mapper<models.querybuilderannotation.UserProfile>("up").map(rs, models.querybuilderannotation.UserProfile.class);
+            User user = new Mapper<User>("u").map(rs, User.class);
+            UserProfile userProfile = new Mapper<UserProfile>("up").map(rs, UserProfile.class);
 
-            models.querybuilderannotation.User user = new models.querybuilderannotation.User();
+            User user = new User();
             user.setId(rs.getInt("u_id"));
             user.setName(rs.getString("u_name"));
 
-            models.querybuilderannotation.UserProfile userProfile = new models.querybuilderannotation.UserProfile();
+            UserProfile userProfile = new UserProfile();
             userProfile.setGender(rs.getString("up_gender"));
             userProfile.setAge(rs.getInt("up_age"));
 
@@ -37,8 +48,8 @@ String sql = "SELECT u.id AS u_id, u.name AS u_name, up.gender AS up_gender, up.
 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
     try (ResultSet rs = stmt.executeQuery()) {
         while (rs.next()) {
-            models.querybuilderannotation.User user = new Mapper<models.querybuilderannotation.User>("u").map(rs, models.querybuilderannotation.User.class);
-            models.querybuilderannotation.UserProfile userProfile = new Mapper<models.querybuilderannotation.UserProfile>("up").map(rs, models.querybuilderannotation.UserProfile.class);
+            User user = new Mapper<User>("u").map(rs, User.class);
+            UserProfile userProfile = new Mapper<UserProfile>("up").map(rs, UserProfile.class);
 
             user.setUserProfile(userProfile);
         }
@@ -50,19 +61,19 @@ try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
 For this to work, you only have to set the annotations on the class like (for the example above):
 ```java
-public class models.querybuilderannotation.User {
+public class User {
     @Column(name = "id")
     private int id;
     @Column(name = "name")
     private String name;
 
-    private models.querybuilderannotation.UserProfile userProfile;
+    private UserProfile userProfile;
 
     // getter and setters omitted
 }
 ```
 ```java
-public class models.querybuilderannotation.UserProfile {
+public class UserProfile {
     @Column(name = "id")
     private int id;
     @Column(name = "user_id")
