@@ -2,6 +2,7 @@ package br.com.augustoccesar.querybuilder.mapper.mapper;
 
 import br.com.augustoccesar.querybuilder.mapper.readers.ClassReader;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.BeanUtilsBean;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
@@ -24,6 +25,7 @@ public class Mapper<T> {
             try {
                 String columnName = alias + "_" + columnData.getName();
                 if (hasColumn(rs, columnName)) {
+                    BeanUtilsBean.getInstance().getConvertUtils().register(false, false, 0);
                     BeanUtils.setProperty(obj, columnData.getAttributeName(), rs.getObject(columnName));
                 }
             } catch (IllegalAccessException | InvocationTargetException | SQLException e) {

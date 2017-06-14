@@ -21,7 +21,7 @@ public class IntegrationTest {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:test.db");
 
-            String createTableUser = "CREATE TABLE users (id INTEGER, name VARCHAR);";
+            String createTableUser = "CREATE TABLE users (id INTEGER, name VARCHAR, deleted_at DATE DEFAULT NULL);";
             String createTableUserProfile = "CREATE TABLE users_profile (id INTEGER, user_id INTEGER, gender VARCHAR, age INTEGER, FOREIGN KEY (user_id) REFERENCES users(id));";
 
             String insertSampleUser = "INSERT INTO users (id, name) VALUES (1, 'Augusto Cesar');";
@@ -183,5 +183,27 @@ public class IntegrationTest {
         assertEquals("Augusto Cesar", user.getName());
         assertEquals("male", user.getUserProfile().getGender());
         assertEquals(23, user.getUserProfile().getAge());
+    }
+
+    @Test
+    public void testFetchNullDate() {
+        String sql = "SELECT u.id AS u_id, u.name AS u_name, u.deleted_at AS u_deleted_at FROM users u WHERE u.id = 1";
+
+        try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    models.querybuilderannotation.User user = new Mapper<models.querybuilderannotation.User>("u").map(rs, models.querybuilderannotation.User.class);
+                    models.querybuilderannotation.UserProfile userProfile = new Mapper<models.querybuilderannotation.UserProfile>("up").map(rs, models.querybuilderannotation.UserProfile.class);
+
+                    user.setUserProfile(userProfile);
+
+                    assertEquals(1, user.getId());
+                    assertEquals("Augusto Cesar", user.getName());
+                    assertEquals(null, user.getDeletedAt());
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,5 +1,7 @@
 package models.withoutannotation;
 
+import java.util.Date;
+
 /**
  * Author: augustoccesar
  * Date: 16/05/17
@@ -7,6 +9,7 @@ package models.withoutannotation;
 public class User {
     private int id;
     private String name;
+    private Date deletedAt;
 
     private UserProfile userProfile;
 
@@ -24,6 +27,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(Date deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     public UserProfile getUserProfile() {

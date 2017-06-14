@@ -1,6 +1,7 @@
 package models.jpaannotation;
 
 import javax.persistence.Column;
+import java.util.Date;
 
 /**
  * Author: augustoccesar
@@ -11,6 +12,8 @@ public class User {
     private int id;
     @Column(name = "name")
     private String name;
+    @Column(name = "deletedAt")
+    private Date deletedAt;
 
     private UserProfile userProfile;
 
@@ -28,6 +31,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(Date deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     public UserProfile getUserProfile() {
