@@ -2,6 +2,8 @@ package models.querybuilderannotation;
 
 import br.com.augustoccesar.querybuilder.mapper.annotations.Column;
 
+import java.util.Date;
+
 /**
  * Author: augustoccesar
  * Date: 16/05/17
@@ -11,6 +13,8 @@ public class User {
     private int id;
     @Column(name = "name")
     private String name;
+    @Column(name = "deleted_at")
+    private Date deletedAt;
 
     private UserProfile userProfile;
 
@@ -28,6 +32,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(Date deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     public UserProfile getUserProfile() {
